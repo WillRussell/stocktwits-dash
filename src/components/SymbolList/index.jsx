@@ -15,7 +15,7 @@ import MoneyIcon from '@material-ui/icons/Money';
 
 import useStyles from './styles';
 
-function SymbolList({ isLoading, symbolCollection }) {
+function SymbolList({ isLoading, removeSymbol, symbolCollection }) {
   const classes = useStyles();
 
   const listItems = symbolCollection.map((o) => (
@@ -26,9 +26,15 @@ function SymbolList({ isLoading, symbolCollection }) {
             <MoneyIcon />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary={o.symbol} secondary={o.title} />
+        <ListItemText
+          primary={o.symbol}
+          secondary={o.title}
+        />
         <ListItemSecondaryAction>
-          <IconButton disabled={isLoading}>
+          <IconButton
+            disabled={isLoading}
+            onClick={() => removeSymbol(o.id)}
+          >
             <CloseIcon />
           </IconButton>
         </ListItemSecondaryAction>
@@ -46,6 +52,7 @@ function SymbolList({ isLoading, symbolCollection }) {
 
 SymbolList.propTypes = {
   isLoading: PropTypes.bool.isRequired,
+  removeSymbol: PropTypes.func.isRequired,
   symbolCollection: PropTypes.arrayOf(PropTypes.shape({
     symbol: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,

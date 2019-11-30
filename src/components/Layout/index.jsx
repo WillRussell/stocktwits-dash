@@ -6,6 +6,13 @@ import { withTheme } from '@material-ui/core/styles';
 /* Styles */
 import useStyles from './styles';
 
+/* Helpers */
+import {
+  removeTweetsById,
+  removeSymbolById,
+  sortTweets,
+} from '../../support/collection-helpers';
+
 /* Page Components */
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
@@ -33,13 +40,11 @@ function Layout({ toggleTheme, isThemeLight }) {
         }
         return response.json();
       })
-      .then((newData) => {
-        const sortedTweets = [
-          ...tweetCollection,
-          ...newData.messages,
-        ].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-        setTweetCollection(sortedTweets);
-        setSymbolCollection([...symbolCollection, newData.symbol]);
+      .then((newTweets) => {
+        const sortedCollection = sortTweets(tweetCollection, newTweets);
+        setTweetCollection(sortedCollection);
+        setSymbolCollection([...symbolCollection, newTweets.symbol]);
+        setSymbol('');
         setIsLoading(false);
       })
       .catch((err) => {
@@ -49,6 +54,13 @@ function Layout({ toggleTheme, isThemeLight }) {
           setIsLoading(false);
         });
       });
+  };
+
+  const removeSymbol = (id) => {
+    const updatedTweetCollection = removeTweetsById(tweetCollection, id);
+    const updatedSymbolCollection = removeSymbolById(symbolCollection, id);
+    setTweetCollection(updatedTweetCollection);
+    setSymbolCollection(updatedSymbolCollection);
   };
 
   return (
@@ -64,6 +76,7 @@ function Layout({ toggleTheme, isThemeLight }) {
         handleSearch={handleSearch}
         handleSidebarClose={handleSidebarClose}
         open={open}
+        removeSymbol={removeSymbol}
         symbolCollection={symbolCollection}
         symbol={symbol}
         setSymbol={setSymbol}

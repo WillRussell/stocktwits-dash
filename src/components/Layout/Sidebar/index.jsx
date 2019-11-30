@@ -16,6 +16,7 @@ function Sidebar({
   handleSearch,
   handleSidebarClose,
   open,
+  removeSymbol,
   symbol,
   symbolCollection,
   setSymbol,
@@ -56,6 +57,7 @@ function Sidebar({
       <SymbolList
         isLoading={isLoading}
         symbolCollection={symbolCollection}
+        removeSymbol={removeSymbol}
       />
     </Drawer>
   );
@@ -66,6 +68,7 @@ Sidebar.propTypes = {
   handleSidebarClose: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
   handleSearch: PropTypes.func.isRequired,
+  removeSymbol: PropTypes.func.isRequired,
   symbol: PropTypes.string.isRequired,
   symbolCollection: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   setSymbol: PropTypes.func.isRequired,
