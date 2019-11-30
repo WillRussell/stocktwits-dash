@@ -1,16 +1,18 @@
 import { createMuiTheme } from '@material-ui/core/styles';
-import { blue } from '@material-ui/core/colors';
+import { lightBlue, blue } from '@material-ui/core/colors';
+
+export const drawerWidth = 260;
 
 export const darkTheme = createMuiTheme({
   palette: {
     type: 'dark',
-    primary: { main: blue[700] },
+    primary: { main: lightBlue[400] },
   },
 });
 
 export const lightTheme = createMuiTheme({
   palette: {
     type: 'light',
-    primary: { main: blue[700] },
+    primary: blue,
   },
 });

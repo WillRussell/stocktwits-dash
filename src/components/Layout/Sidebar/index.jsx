@@ -3,11 +3,23 @@ import PropTypes from 'prop-types';
 
 /* Material-UI Components */
 import Drawer from '@material-ui/core/Drawer';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import useStyles from './styles';
+import Divider from '@material-ui/core/Divider';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
-function Sidebar({ open, handleSidebarClose }) {
+import useStyles from './styles';
+import Header from './Header';
+import Search from '../../Search';
+import SymbolList from '../../SymbolList';
+
+function Sidebar({
+  isLoading,
+  handleSearch,
+  handleSidebarClose,
+  open,
+  symbol,
+  symbolCollection,
+  setSymbol,
+}) {
   const classes = useStyles();
 
   return (
@@ -18,22 +30,45 @@ function Sidebar({ open, handleSidebarClose }) {
       open={open}
       classes={{ paper: classes.drawerPaper }}
     >
-      <div className={classes.drawerHeader}>
-        <IconButton
-          className={classes.closeButton}
-          onClick={handleSidebarClose}
-        >
-          <CloseIcon fontSize="small" />
-        </IconButton>
+      <Header
+        handleSidebarClose={handleSidebarClose}
+      />
+      <Search
+        handleSearch={handleSearch}
+        handleSidebarClose={handleSidebarClose}
+        symbol={symbol}
+        symbolCollection={symbolCollection}
+        setSymbol={setSymbol}
+        isLoading={isLoading}
+      />
+      <div className={classes.progressContainer}>
+        { isLoading && (
+          <LinearProgress
+            color="secondary"
+            variant="query"
+            className={classes.root}
+          />
+        )}
       </div>
+      <Divider
+        className={classes.headDivider}
+      />
+      <SymbolList
+        isLoading={isLoading}
+        symbolCollection={symbolCollection}
+      />
     </Drawer>
   );
 }
 
 Sidebar.propTypes = {
   open: PropTypes.bool.isRequired,
-  isThemeLight: PropTypes.bool.isRequired,
   handleSidebarClose: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  handleSearch: PropTypes.func.isRequired,
+  symbol: PropTypes.string.isRequired,
+  symbolCollection: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  setSymbol: PropTypes.func.isRequired,
 };
 
 export default Sidebar;

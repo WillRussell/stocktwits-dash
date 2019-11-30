@@ -1,15 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
-
-const drawerWidth = 260;
+import { drawerWidth } from '../../../support/themes';
 
 const styles = makeStyles((theme) => ({
-  closeButton: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    padding: theme.spacing(1 / 2),
-    margin: theme.spacing(1 / 2),
-  },
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
@@ -17,12 +9,17 @@ const styles = makeStyles((theme) => ({
   drawerPaper: {
     width: drawerWidth,
   },
-  drawerHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    padding: '0 8px',
-    ...theme.mixins.toolbar,
-    justifyContent: 'center',
+  headDivider: {
+    marginTop: theme.spacing(1),
+  },
+  progressContainer: {
+    height: theme.spacing(3),
+  },
+  root: {
+    marginLeft: theme.spacing(3),
+    marginRight: theme.spacing(3),
+    marginTop: theme.spacing(3 / 2),
+    marginBottom: -theme.spacing(3),
   },
 }));
 

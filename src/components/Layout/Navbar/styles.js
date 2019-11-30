@@ -1,6 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
-
-const drawerWidth = 260;
+import { drawerWidth } from '../../../support/themes';
 
 const styles = makeStyles((theme) => ({
   grow: {
@@ -12,6 +11,7 @@ const styles = makeStyles((theme) => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     color: theme.palette.common.white,
+    background: 'rgb(51, 51, 51)',
   },
   appBarShift: {
     width: `calc(100% - ${drawerWidth}px)`,
