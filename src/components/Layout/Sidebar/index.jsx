@@ -10,8 +10,10 @@ import useStyles from './styles';
 import Header from './Header';
 import Search from '../../Search';
 import SymbolList from '../../SymbolList';
+import Errors from '../../Errors';
 
 function Sidebar({
+  errors,
   isLoading,
   handleSearch,
   handleSidebarClose,
@@ -43,6 +45,7 @@ function Sidebar({
         isLoading={isLoading}
       />
       <div className={classes.progressContainer}>
+
         { isLoading && (
           <LinearProgress
             color="secondary"
@@ -50,6 +53,13 @@ function Sidebar({
             className={classes.root}
           />
         )}
+
+        { !isLoading && (
+          <Errors
+            data={errors}
+          />
+        )}
+
       </div>
       <Divider
         className={classes.headDivider}
@@ -67,6 +77,7 @@ Sidebar.propTypes = {
   open: PropTypes.bool.isRequired,
   handleSidebarClose: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
+  errors: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   handleSearch: PropTypes.func.isRequired,
   removeSymbol: PropTypes.func.isRequired,
   symbol: PropTypes.string.isRequired,

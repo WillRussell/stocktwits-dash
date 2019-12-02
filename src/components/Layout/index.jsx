@@ -29,6 +29,7 @@ function Layout({ toggleTheme, isThemeLight }) {
   const [isLoading, setIsLoading] = useState(false);
   const [tweetCollection, setTweetCollection] = useState([]);
   const [symbolCollection, setSymbolCollection] = useState([]);
+  const [errors, setErrors] = useState([]);
 
   const handleSearch = (event) => {
     event.preventDefault();
@@ -45,12 +46,12 @@ function Layout({ toggleTheme, isThemeLight }) {
         setTweetCollection(sortedCollection);
         setSymbolCollection([...symbolCollection, newTweets.symbol]);
         setSymbol('');
+        setErrors([]);
         setIsLoading(false);
       })
       .catch((err) => {
         err.text().then((errorRes) => {
-          const errors = JSON.parse(errorRes);
-          console.log(errors);
+          setErrors(JSON.parse(errorRes));
           setIsLoading(false);
         });
       });
@@ -72,6 +73,7 @@ function Layout({ toggleTheme, isThemeLight }) {
         toggleTheme={toggleTheme}
       />
       <Sidebar
+        errors={errors}
         isLoading={isLoading}
         handleSearch={handleSearch}
         handleSidebarClose={handleSidebarClose}
