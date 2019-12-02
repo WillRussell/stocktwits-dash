@@ -11,7 +11,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
 import ListItemText from '@material-ui/core/ListItemText';
-import MoneyIcon from '@material-ui/icons/Money';
+import MoneyIcon from '@material-ui/icons/AttachMoney';
 
 import useStyles from './styles';
 

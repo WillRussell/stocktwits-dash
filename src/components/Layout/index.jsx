@@ -77,6 +77,7 @@ function Layout({ toggleTheme, isThemeLight }) {
         isLoading={isLoading}
         handleSearch={handleSearch}
         handleSidebarClose={handleSidebarClose}
+        numberOfTweetsDisplayed={tweetCollection.length}
         open={open}
         removeSymbol={removeSymbol}
         symbolCollection={symbolCollection}

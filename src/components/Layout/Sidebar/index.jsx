@@ -8,6 +8,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 
 import useStyles from './styles';
 import Header from './Header';
+import Footer from './Footer';
 import Search from '../../Search';
 import SymbolList from '../../SymbolList';
 import Errors from '../../Errors';
@@ -17,6 +18,7 @@ function Sidebar({
   isLoading,
   handleSearch,
   handleSidebarClose,
+  numberOfTweetsDisplayed,
   open,
   removeSymbol,
   symbol,
@@ -69,6 +71,9 @@ function Sidebar({
         symbolCollection={symbolCollection}
         removeSymbol={removeSymbol}
       />
+      <Footer
+        numberOfTweetsDisplayed={numberOfTweetsDisplayed}
+      />
     </Drawer>
   );
 }
@@ -78,6 +83,7 @@ Sidebar.propTypes = {
   handleSidebarClose: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
   errors: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  numberOfTweetsDisplayed: PropTypes.number.isRequired,
   handleSearch: PropTypes.func.isRequired,
   removeSymbol: PropTypes.func.isRequired,
   symbol: PropTypes.string.isRequired,
