@@ -1,24 +1,20 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import { withTheme } from '@material-ui/core/styles';
+import { omit } from 'lodash';
 
 /* Styles */
 import useStyles from './styles';
 
 /* Helpers */
 import {
-  removeTweetsById,
-  removeSymbolById,
-  sortTweets,
-} from '../../support/collection-helpers';
+  buildBatchRequest,
+  getSymbolMap,
+} from '../../support/helpers';
 
 /* Page Components */
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
-import Tweets from '../Tweets';
-
-const LAMBDA_PATH = process.env.REACT_APP_LAMBDA_PATH;
+import Main from './Main';
 
 function Layout({ toggleTheme, isThemeLight }) {
   const classes = useStyles();
@@ -27,43 +23,30 @@ function Layout({ toggleTheme, isThemeLight }) {
   const handleSidebarOpen = () => toggleSidebar(true);
   const handleSidebarClose = () => toggleSidebar(false);
 
-  const [symbol, setSymbol] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [tweetCollection, setTweetCollection] = useState([]);
-  const [symbolCollection, setSymbolCollection] = useState([]);
-  const [errors, setErrors] = useState([]);
+  const [userInput, setUserInput] = useState('');
+  const [activeSymbol, setActiveSymbol] = useState('');
+  const [master, setMaster] = useState({});
+  const selection = master[activeSymbol];
 
   const handleSearch = (event) => {
     event.preventDefault();
     setIsLoading(true);
-    fetch(`${LAMBDA_PATH}?symbol=${symbol}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw response;
-        }
-        return response.json();
-      })
-      .then((newTweets) => {
-        const sortedCollection = sortTweets(tweetCollection, newTweets);
-        setTweetCollection(sortedCollection);
-        setSymbolCollection([...symbolCollection, newTweets.symbol]);
-        setSymbol('');
-        setErrors([]);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        err.text().then((errorRes) => {
-          setErrors(JSON.parse(errorRes));
-          setIsLoading(false);
-        });
-      });
+    const requests = buildBatchRequest(userInput);
+    Promise.all(requests).then((data) => {
+      const newMap = getSymbolMap(data);
+      setMaster({ ...master, ...newMap });
+      setUserInput('');
+      setIsLoading(false);
+    });
   };
 
   const removeSymbol = (id) => {
-    const updatedTweetCollection = removeTweetsById(tweetCollection, id);
-    const updatedSymbolCollection = removeSymbolById(symbolCollection, id);
-    setTweetCollection(updatedTweetCollection);
-    setSymbolCollection(updatedSymbolCollection);
+    const newMap = omit(master, id);
+    setMaster(newMap);
+    if (id === activeSymbol) {
+      setActiveSymbol('');
+    }
   };
 
   return (
@@ -71,26 +54,26 @@ function Layout({ toggleTheme, isThemeLight }) {
       <Navbar
         open={open}
         isThemeLight={isThemeLight}
-        handleSidebarOpen={handleSidebarOpen}
         toggleTheme={toggleTheme}
+        handleSidebarOpen={handleSidebarOpen}
       />
       <Sidebar
-        errors={errors}
+        activeSymbol={activeSymbol}
         isLoading={isLoading}
         handleSearch={handleSearch}
         handleSidebarClose={handleSidebarClose}
-        numberOfTweetsDisplayed={tweetCollection.length}
+        master={master}
         open={open}
+        userInput={userInput}
         removeSymbol={removeSymbol}
-        symbolCollection={symbolCollection}
-        symbol={symbol}
-        setSymbol={setSymbol}
+        setUserInput={setUserInput}
+        setActiveSymbol={setActiveSymbol}
       />
-      <main className={classNames(classes.content, { [classes.contentShift]: open })}>
-        <div className={classes.drawerHeader} />
-        <Tweets data={tweetCollection} />
-      </main>
-
+      <Main
+        open={open}
+        master={master}
+        selection={selection}
+      />
     </div>
   );
 }
@@ -100,4 +83,4 @@ Layout.propTypes = {
   isThemeLight: PropTypes.bool.isRequired,
 };
 
-export default withTheme(Layout);
+export default Layout;

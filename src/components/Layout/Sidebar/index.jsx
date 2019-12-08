@@ -11,21 +11,23 @@ import Header from './Header';
 import Footer from './Footer';
 import Search from '../../Search';
 import SymbolList from '../../SymbolList';
-import Errors from '../../Errors';
+
+import { getTotalTweetCount } from '../../../support/helpers';
 
 function Sidebar({
-  errors,
+  master,
+  activeSymbol,
+  setActiveSymbol,
+  removeSymbol,
   isLoading,
   handleSearch,
   handleSidebarClose,
-  numberOfTweetsDisplayed,
   open,
-  removeSymbol,
-  symbol,
-  symbolCollection,
-  setSymbol,
+  userInput,
+  setUserInput,
 }) {
   const classes = useStyles();
+  const tweetCount = getTotalTweetCount(master);
 
   return (
     <Drawer
@@ -41,9 +43,8 @@ function Sidebar({
       <Search
         handleSearch={handleSearch}
         handleSidebarClose={handleSidebarClose}
-        symbol={symbol}
-        symbolCollection={symbolCollection}
-        setSymbol={setSymbol}
+        userInput={userInput}
+        setUserInput={setUserInput}
         isLoading={isLoading}
       />
       <div className={classes.progressContainer}>
@@ -56,23 +57,19 @@ function Sidebar({
           />
         )}
 
-        { !isLoading && (
-          <Errors
-            data={errors}
-          />
-        )}
-
       </div>
       <Divider
         className={classes.headDivider}
       />
       <SymbolList
+        activeSymbol={activeSymbol}
         isLoading={isLoading}
-        symbolCollection={symbolCollection}
+        master={master}
         removeSymbol={removeSymbol}
+        setActiveSymbol={setActiveSymbol}
       />
       <Footer
-        numberOfTweetsDisplayed={numberOfTweetsDisplayed}
+        tweetCount={tweetCount}
       />
     </Drawer>
   );
@@ -82,13 +79,13 @@ Sidebar.propTypes = {
   open: PropTypes.bool.isRequired,
   handleSidebarClose: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  errors: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  numberOfTweetsDisplayed: PropTypes.number.isRequired,
   handleSearch: PropTypes.func.isRequired,
+  userInput: PropTypes.string.isRequired,
+  setUserInput: PropTypes.func.isRequired,
+  setActiveSymbol: PropTypes.func.isRequired,
   removeSymbol: PropTypes.func.isRequired,
-  symbol: PropTypes.string.isRequired,
-  symbolCollection: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  setSymbol: PropTypes.func.isRequired,
+  activeSymbol: PropTypes.string.isRequired,
+  master: PropTypes.shape({}).isRequired,
 };
 
 export default Sidebar;

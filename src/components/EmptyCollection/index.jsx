@@ -9,6 +9,7 @@ const EmptyCollection = () => {
   return (
     <div className={classes.container}>
       <Typography
+        align="center"
         className={classes.root}
         color="primary"
         gutterBottom
@@ -16,7 +17,7 @@ const EmptyCollection = () => {
       >
         Nothing to Display!
       </Typography>
-      <Typography variant="body1">
+      <Typography align="center" variant="body1">
         Enter a symbol in the search bar to fetch tweets.
       </Typography>
     </div>

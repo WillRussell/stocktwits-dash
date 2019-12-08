@@ -2,61 +2,71 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 /* Material-UI Components */
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
+import Tooltip from '@material-ui/core/Tooltip';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
+import IconButton from '@material-ui/core/IconButton';
+import RemoveIcon from '@material-ui/icons/Delete';
 import Divider from '@material-ui/core/Divider';
 import ListItemText from '@material-ui/core/ListItemText';
-import MoneyIcon from '@material-ui/icons/AttachMoney';
 
 import useStyles from './styles';
 
-function SymbolList({ isLoading, removeSymbol, symbolCollection }) {
+function SymbolList({
+  activeSymbol,
+  isLoading,
+  master,
+  removeSymbol,
+  setActiveSymbol,
+}) {
   const classes = useStyles();
-
-  const listItems = symbolCollection.map((o) => (
-    <div key={o.id}>
-      <ListItem>
-        <ListItemAvatar>
-          <Avatar>
-            <MoneyIcon />
-          </Avatar>
-        </ListItemAvatar>
-        <ListItemText
-          primary={o.symbol}
-          secondary={o.title}
-        />
-        <ListItemSecondaryAction>
-          <IconButton
-            disabled={isLoading}
-            onClick={() => removeSymbol(o.id)}
-          >
-            <CloseIcon />
-          </IconButton>
-        </ListItemSecondaryAction>
-      </ListItem>
-      <Divider variant="inset" />
-    </div>
-  ));
-
   return (
     <List className={classes.root}>
-      {listItems}
+      {Object.entries(master).map(([id, val]) => (
+        <div key={id}>
+          <ListItem
+            alignItems="flex-start"
+            button
+            selected={id === activeSymbol}
+            disabled={isLoading}
+            onClick={() => setActiveSymbol(id)}
+          >
+            <ListItemText
+              primary={val.symbol.symbol}
+              secondary={val.symbol.title}
+            />
+            <ListItemSecondaryAction>
+              <Tooltip
+                title="Remove tweets"
+                placement="right"
+              >
+                <span>
+                  <IconButton
+                    edge="end"
+                    disabled={isLoading}
+                    onClick={() => removeSymbol(id)}
+                  >
+                    <RemoveIcon fontSize="small" />
+                  </IconButton>
+                </span>
+              </Tooltip>
+
+            </ListItemSecondaryAction>
+          </ListItem>
+          <Divider />
+        </div>
+      ))}
     </List>
   );
 }
 
 SymbolList.propTypes = {
+  activeSymbol: PropTypes.string.isRequired,
   isLoading: PropTypes.bool.isRequired,
+  master: PropTypes.shape({}).isRequired,
   removeSymbol: PropTypes.func.isRequired,
-  symbolCollection: PropTypes.arrayOf(PropTypes.shape({
-    symbol: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-  })).isRequired,
+  setActiveSymbol: PropTypes.func.isRequired,
 };
 
 export default SymbolList;

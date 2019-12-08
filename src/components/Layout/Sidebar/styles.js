@@ -11,6 +11,7 @@ const styles = makeStyles((theme) => ({
   },
   headDivider: {
     marginTop: theme.spacing(1),
+    marginBottom: 0,
   },
   progressContainer: {
     height: theme.spacing(3),

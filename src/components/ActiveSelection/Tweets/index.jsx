@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 
 import TweetCard from './TweetCard';
-import EmptyCollection from './EmptyCollection';
 
 function Tweets({ data }) {
   const tweetCards = (
@@ -16,7 +15,7 @@ function Tweets({ data }) {
     </Grid>
   );
 
-  return (data.length ? tweetCards : <EmptyCollection />);
+  return (data.length ? tweetCards : null);
 }
 
 Tweets.propTypes = {

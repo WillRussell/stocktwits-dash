@@ -10,14 +10,14 @@ import useStyles from './styles';
 function Search({
   handleSearch,
   isLoading,
-  symbol,
-  setSymbol,
+  userInput,
+  setUserInput,
 }) {
   const classes = useStyles();
 
   const handleChange = (event) => {
     event.preventDefault();
-    setSymbol(event.target.value);
+    setUserInput(event.target.value);
   };
 
   const handleKeyPress = (event) => {
@@ -38,11 +38,10 @@ function Search({
             input: classes.inputInnerContainer,
           }}
           disabled={isLoading}
-          inputProps={{ maxLength: '5' }}
           onKeyDown={handleKeyPress}
           onChange={handleChange}
-          placeholder="AAPL"
-          value={symbol}
+          placeholder="AAPL, TSLA"
+          value={userInput}
         />
       </div>
       <div className={classes.searchButton}>
@@ -50,10 +49,10 @@ function Search({
           fullWidth
           variant="outlined"
           color="primary"
-          disabled={!symbol.length || isLoading}
+          disabled={!userInput.length || isLoading}
           onClick={handleSearch}
         >
-            Add Symbol
+            Add Symbols
         </Button>
       </div>
     </div>
@@ -63,8 +62,8 @@ function Search({
 Search.propTypes = {
   handleSearch: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  symbol: PropTypes.string.isRequired,
-  setSymbol: PropTypes.func.isRequired,
+  userInput: PropTypes.string.isRequired,
+  setUserInput: PropTypes.func.isRequired,
 };
 
 export default Search;
