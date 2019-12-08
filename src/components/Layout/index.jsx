@@ -18,6 +18,8 @@ import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import Tweets from '../Tweets';
 
+const LAMBDA_PATH = process.env.REACT_APP_LAMBDA_PATH;
+
 function Layout({ toggleTheme, isThemeLight }) {
   const classes = useStyles();
 
@@ -34,7 +36,7 @@ function Layout({ toggleTheme, isThemeLight }) {
   const handleSearch = (event) => {
     event.preventDefault();
     setIsLoading(true);
-    fetch(`/.netlify/functions/fetch-tweets?symbol=${symbol}`)
+    fetch(`${LAMBDA_PATH}?symbol=${symbol}`)
       .then((response) => {
         if (!response.ok) {
           throw response;
